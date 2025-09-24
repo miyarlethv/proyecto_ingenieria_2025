@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('mascotas', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre'); // Nombre de la mascota
-            $table->string('edad'); // Edad (puede ser texto: "2 años")
-            $table->text('caracteristicas')->nullable(); // Características opcionales
+            $table->string('nombre');   
+            $table->string('edad'); 
+            $table->text('caracteristicas')->nullable(); 
             $table->string('foto')->nullable(); // Ruta de la foto
             $table->timestamps(); // created_at y updated_at
         });
