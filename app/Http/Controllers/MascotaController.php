@@ -10,11 +10,12 @@ class MascotaController extends Controller
     // 👉 Listar todas las mascotas
     public function index()
     {
-        return response()->json(Mascota::all(), 200);
+        $mascotas = Mascota::listarTodas();
+        return response()->json($mascotas, 200);
     }
 
     // 👉 Registrar una mascota
-    public function store(Request $request)
+    public function crear(Request $request)
     {
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
@@ -23,20 +24,12 @@ class MascotaController extends Controller
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Guardar foto si existe
-        $fotoPath = null;
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('mascotas', 'public');
+            $validated['foto'] = $fotoPath;
         }
 
-        // Crear mascota
-        $mascota = Mascota::create([
-            'nombre' => $validated['nombre'],
-            'edad' => $validated['edad'],
-            'caracteristicas' => $validated['caracteristicas'] ?? null,
-            'foto' => $fotoPath,
-        ]);
-
+        $mascota = Mascota::registrarMascota($validated);
         return response()->json([
             'message' => 'Mascota registrada correctamente',
             'data' => $mascota
@@ -44,29 +37,22 @@ class MascotaController extends Controller
     }
 
     // 👉 Actualizar una mascota
-    public function update(Request $request, $id)
+    public function actualizar(Request $request)
     {
-        $mascota = Mascota::findOrFail($id);
-
         $validated = $request->validate([
+            'id' => 'required',
             'nombre' => 'required|string|max:255',
             'edad' => 'required|string|max:50',
             'caracteristicas' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Guardar nueva foto si existe
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('mascotas', 'public');
-            $mascota->foto = $fotoPath;
+            $validated['foto'] = $fotoPath;
         }
 
-        $mascota->nombre = $validated['nombre'];
-        $mascota->edad = $validated['edad'];
-        $mascota->caracteristicas = $validated['caracteristicas'] ?? $mascota->caracteristicas;
-
-        $mascota->save();
-
+        $mascota = Mascota::ActualizarMascota($validated);
         return response()->json([
             'message' => 'Mascota actualizada correctamente',
             'data' => $mascota
@@ -74,11 +60,12 @@ class MascotaController extends Controller
     }
 
     // 👉 Eliminar una mascota
-    public function destroy($id)
+    public function eliminar(Request $request)
     {
-        $mascota = Mascota::findOrFail($id);
-        $mascota->delete();
-
+        $validated = $request->validate([
+            'id' => 'required',
+        ]);
+        Mascota::eliminarMascota($validated['id']);
         return response()->json([
             'message' => 'Mascota eliminada correctamente'
         ], 200);
