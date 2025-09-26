@@ -20,7 +20,7 @@ Route::post('actualizarFundacion', [FundacionController::class, 'actualizar']);
 Route::post('eliminarPorIdFundacion', [FundacionController::class, 'eliminarPorId']);
 
 // Mascotas
-Route::post('mascotas', [MascotaController::class, 'store']);
-Route::get('mascotas', [MascotaController::class, 'index']);
-Route::put('mascotas/{id}', [MascotaController::class, 'update']);
-Route::delete('mascotas/{id}', [MascotaController::class, 'destroy']);
+Route::post('CrearMascotas', [MascotaController::class, 'crear']);
+Route::get('/mascotas', [MascotaController::class, 'index']);
+Route::put('ActualizarMascotas', [MascotaController::class, 'actualizar']);
+Route::delete('EliminarMascotas', [MascotaController::class, 'eliminar']);
