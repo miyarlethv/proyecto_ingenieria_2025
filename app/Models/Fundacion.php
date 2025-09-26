@@ -12,7 +12,17 @@ class Fundacion extends Model
 
     protected $table = 'fundaciones';
 
-    protected $fillable = ['nombre','nit', 'email', 'telefono', 'direccion', 'password', 'slogan', 'logo'];
+    protected $fillable = [
+        'nombre',
+        'nit',
+        'email',
+        'telefono',
+        'direccion',
+        'password',
+        'slogan',
+        'logo'
+    ];
+
     protected $hidden = ['password'];
 
     // Crear nueva persona
