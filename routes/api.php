@@ -4,6 +4,7 @@ use App\Http\Controllers\FundacionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\MascotaController;
+use App\Http\Controllers\InicioSesionController;
 
 // Personas
 Route::get('/', [PersonaController::class, 'index']);
@@ -11,6 +12,9 @@ Route::post('crear', [PersonaController::class, 'crear']);
 Route::get('traerPersonaId', [PersonaController::class, 'traerPersonaId']);
 Route::post('actualizar', [PersonaController::class, 'actualizar']);
 Route::post('eliminarPorId', [PersonaController::class, 'eliminarPorId']);
+
+// Login
+Route::post('login', [InicioSesionController::class, 'login']);
 
 // Fundaciones
 Route::get('Fundacion', [FundacionController::class, 'index']);
