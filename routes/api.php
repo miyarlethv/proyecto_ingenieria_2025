@@ -23,4 +23,4 @@ Route::post('eliminarPorIdFundacion', [FundacionController::class, 'eliminarPorI
 Route::post('CrearMascotas', [MascotaController::class, 'crear']);
 Route::get('/mascotas', [MascotaController::class, 'index']);
 Route::put('ActualizarMascotas', [MascotaController::class, 'actualizar']);
-Route::delete('EliminarMascotas', [MascotaController::class, 'eliminar']);
+Route::post('EliminarMascotas', [MascotaController::class, 'eliminar']);
