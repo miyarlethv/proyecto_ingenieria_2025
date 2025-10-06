@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('edad'); 
             $table->text('caracteristicas')->nullable(); 
             $table->string('foto')->nullable(); // Ruta de la foto
+            $table->enum('estado', ['habilitado', 'deshabilitado'])->default('habilitado'); // 👈 Campo nuevo
             $table->timestamps(); // created_at y updated_at
         });
     }

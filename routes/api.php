@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\MascotaController;
 use App\Http\Controllers\InicioSesionController;
+use App\Http\Controllers\HistoriaClinicaController;
 
 // Personas
 Route::get('/', [PersonaController::class, 'index']);
@@ -25,6 +26,11 @@ Route::post('eliminarPorIdFundacion', [FundacionController::class, 'eliminarPorI
 
 // Mascotas
 Route::post('CrearMascotas', [MascotaController::class, 'crear']);
-Route::get('/mascotas', [MascotaController::class, 'index']);
+Route::get('mascotas', [MascotaController::class, 'index']);
 Route::put('ActualizarMascotas', [MascotaController::class, 'actualizar']);
-Route::post('EliminarMascotas', [MascotaController::class, 'eliminar']);
+Route::put('EliminarMascotas', [MascotaController::class, 'eliminar']);
+
+
+// Historias Clinicas
+Route::post('CrearHistoriaClinica', [HistoriaClinicaController::class, 'crear']);
+Route::post('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
