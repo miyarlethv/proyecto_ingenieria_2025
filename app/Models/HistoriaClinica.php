@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class HistoriaClinica extends Model
 {
     use HasFactory;
+    protected $table = 'historias_clinicas'; // Nombre real en la BD
 
     protected $fillable = [
         'mascota_id',

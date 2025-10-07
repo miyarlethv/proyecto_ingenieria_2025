@@ -33,4 +33,4 @@ Route::put('EliminarMascotas', [MascotaController::class, 'eliminar']);
 
 // Historias Clinicas
 Route::post('CrearHistoriaClinica', [HistoriaClinicaController::class, 'crear']);
-Route::post('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
+Route::get('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
