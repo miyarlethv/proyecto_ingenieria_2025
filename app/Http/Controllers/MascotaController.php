@@ -7,10 +7,10 @@ use App\Models\Mascota;
 
 class MascotaController extends Controller
 {
-    // 👉 Listar todas las mascotas
+    // 👉 Listar solo las mascotas habilitadas
     public function index()
     {
-        $mascotas = Mascota::listarTodas();
+        $mascotas = Mascota::where('estado', 'habilitado')->get();
         return response()->json($mascotas, 200);
     }
 
@@ -29,7 +29,9 @@ class MascotaController extends Controller
             $validated['foto'] = $fotoPath;
         }
 
-        $mascota = Mascota::registrarMascota($validated);
+        // Se crea habilitada por defecto
+        $mascota = Mascota::create($validated + ['estado' => 'habilitado']);
+
         return response()->json([
             'message' => 'Mascota registrada correctamente',
             'data' => $mascota
@@ -40,34 +42,49 @@ class MascotaController extends Controller
     public function actualizar(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required',
+            'id' => 'required|exists:mascotas,id',
             'nombre' => 'required|string|max:255',
             'edad' => 'required|string|max:50',
             'caracteristicas' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        $mascota = Mascota::findOrFail($validated['id']);
+
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('mascotas', 'public');
             $validated['foto'] = $fotoPath;
         }
 
-        $mascota = Mascota::ActualizarMascota($validated);
+        $mascota->update($validated);
+
         return response()->json([
             'message' => 'Mascota actualizada correctamente',
             'data' => $mascota
         ], 200);
     }
 
-    // 👉 Eliminar una mascota
+    // 👉 Deshabilitar (no eliminar) una mascota
     public function eliminar(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required',
+            'id' => 'required|exists:mascotas,id',
         ]);
-        Mascota::eliminarMascota($validated['id']);
+
+        $mascota = Mascota::findOrFail($validated['id']);
+        $mascota->estado = 'deshabilitado';
+        $mascota->save();
+
         return response()->json([
-            'message' => 'Mascota eliminada correctamente'
+            'message' => 'Mascota deshabilitada correctamente',
+            'mascota' => $mascota
         ], 200);
+    }
+
+    // 👉 (Opcional) Mostrar todas (habilitadas y deshabilitadas)
+    public function listarTodas()
+    {
+        $mascotas = Mascota::all();
+        return response()->json($mascotas, 200);
     }
 }

@@ -11,6 +11,7 @@ class Mascota extends Model
         'edad',
         'caracteristicas',
         'foto',
+        'estado'
     ];
 
     // Listar todas las mascotas
