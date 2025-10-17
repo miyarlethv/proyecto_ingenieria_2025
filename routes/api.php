@@ -34,3 +34,5 @@ Route::put('EliminarMascotas', [MascotaController::class, 'eliminar']);
 // Historias Clinicas
 Route::post('CrearHistoriaClinica', [HistoriaClinicaController::class, 'crear']);
 Route::get('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
+Route::put('ActualizarHistoriaClinica', [HistoriaClinicaController::class, 'actualizar']);
+Route::put('EliminarHistoriaClinica', [HistoriaClinicaController::class, 'eliminar']);
