@@ -6,6 +6,8 @@ use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\MascotaController;
 use App\Http\Controllers\InicioSesionController;
 use App\Http\Controllers\HistoriaClinicaController;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\PermisoController;
 
 // Personas
 Route::get('/', [PersonaController::class, 'index']);
@@ -36,3 +38,15 @@ Route::post('CrearHistoriaClinica', [HistoriaClinicaController::class, 'crear'])
 Route::get('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
 Route::put('ActualizarHistoriaClinica', [HistoriaClinicaController::class, 'actualizar']);
 Route::put('EliminarHistoriaClinica', [HistoriaClinicaController::class, 'eliminar']);
+
+// Roles
+Route::post(uri: 'CrearRol', action: [RolController::class, 'store']);
+Route::get(uri: 'ListarRoles', action: [RolController::class, 'index']);
+Route::put(uri: 'ActualizarRol', action: [RolController::class, 'actualizar']);
+Route::put(uri: 'EliminarRol', action: [RolController::class, 'eliminar']);
+
+// Permisos
+Route::post(uri: 'CrearPermiso', action: [PermisoController::class, 'store']);
+Route::get(uri: 'ListarPermisos', action: [PermisoController::class, 'index']);
+Route::put(uri: 'ActualizarPermiso', action: [PermisoController::class, 'actualizar']);
+Route::put(uri: 'EliminarPermiso', action: [PermisoController::class, 'eliminar']);
