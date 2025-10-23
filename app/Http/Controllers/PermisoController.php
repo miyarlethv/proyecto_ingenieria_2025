@@ -25,6 +25,7 @@ class PermisoController extends Controller
         $data = $request->validate([
             'nombre' => 'required|string|unique:permisos,nombre',
             'descripcion' => 'nullable|string',
+            'url' => 'nullable|string',
         ]);
 
         $permiso = Permiso::create($data);
@@ -44,6 +45,7 @@ class PermisoController extends Controller
             'id' => 'required|integer|exists:permisos,id',
             'nombre' => 'required|string|unique:permisos,nombre,' . $request->id,
             'descripcion' => 'nullable|string',
+            'url' => 'nullable|string',
         ]);
 
         $permiso = Permiso::findOrFail($data['id']);

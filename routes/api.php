@@ -8,6 +8,7 @@ use App\Http\Controllers\InicioSesionController;
 use App\Http\Controllers\HistoriaClinicaController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\PermisoController;
+use App\Http\Controllers\FuncionarioController;
 
 // Personas
 Route::get('/', [PersonaController::class, 'index']);
@@ -50,3 +51,10 @@ Route::post(uri: 'CrearPermiso', action: [PermisoController::class, 'store']);
 Route::get(uri: 'ListarPermisos', action: [PermisoController::class, 'index']);
 Route::put(uri: 'ActualizarPermiso', action: [PermisoController::class, 'actualizar']);
 Route::put(uri: 'EliminarPermiso', action: [PermisoController::class, 'eliminar']);
+
+// Personas
+Route::get('ListarFuncionarios', [FuncionarioController::class, 'index']);
+Route::post('CrearFuncionario', [FuncionarioController::class, 'store']);
+Route::put('ActualizarFuncionario', [FuncionarioController::class, 'actualizar']);
+Route::put('EliminarFuncionario', [FuncionarioController::class, 'eliminar']);
+

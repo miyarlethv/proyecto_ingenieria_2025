@@ -38,7 +38,7 @@ class MascotaController extends Controller
         ], 201);
     }
 
-    // 👉 Actualizar una mascota
+    // Actualizar una mascota
     public function actualizar(Request $request)
     {
         $validated = $request->validate([

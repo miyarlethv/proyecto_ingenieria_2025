@@ -40,6 +40,6 @@ class Persona extends Model
         return $persona->delete();
     }
 
-    
+        
 
 }
