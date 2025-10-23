@@ -50,16 +50,16 @@ class FuncionarioController extends Controller
     public function actualizar(Request $request)
     {
         $data = $request->validate([
-            'id' => 'required|integer|exists:funcionarios,id',
-            'nombre' => 'required|string|max:150',
-            'tipo_documento' => 'required|string|max:10',
-            'nit' => 'required|string|max:50|unique:funcionarios' . $request->id,
-            'telefono' => 'required|string|max:20',
-            'email' => 'required|email|max:150|unique;funcionarios' . $request->id,
-            'rol_id' => 'required|integer|exists:roles,id',
-            'password' => 'required|string|min:6',
-            
-        ]);
+        'id' => 'required|integer|exists:funcionarios,id',
+        'nombre' => 'required|string|max:150',
+        'tipo_documento' => 'required|string|max:10',
+        'nit' => 'required|string|max:50|unique:funcionarios,nit,' . $request->id,
+        'telefono' => 'required|string|max:20',
+        'email' => 'required|email|max:150|unique:funcionarios,email,' . $request->id,
+        'rol_id' => 'required|integer|exists:roles,id',
+        'password' => 'nullable|string|min:6',
+]);
+
 
         $funcionario = Funcionario::findOrFail($data['id']);
 
