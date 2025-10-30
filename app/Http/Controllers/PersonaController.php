@@ -44,7 +44,7 @@ class PersonaController extends Controller
     // Mostrar persona por ID
     public function traerPersonaId(string $id)
     {
-        $persona = Persona::findOrFail($id);
+        $persona = Persona::findOrFail($id );
         return response()->json(data: $persona, status: 200);
     }
 
