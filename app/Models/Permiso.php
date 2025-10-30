@@ -9,8 +9,8 @@ class Permiso extends Model
 {
     use HasFactory;
 
-    protected $table = 'permisos';
-    protected $fillable = ['nombre', 'descripcion', 'url'];
+    protected $table = 'permissions';
+    protected $fillable = ['name', 'url', 'descripcion'];
 
     // Relación muchos a muchos con roles
     public function roles()

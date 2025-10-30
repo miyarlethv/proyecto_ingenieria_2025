@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Permiso;
+use Spatie\Permission\Models\Permission;
 
 class PermisoController extends Controller
 {
@@ -13,7 +12,7 @@ class PermisoController extends Controller
      */
     public function index()
     {
-        $permisos = Permiso::all();
+        $permisos = Permission::all();
         return response()->json($permisos, 200);
     }
 
@@ -23,12 +22,15 @@ class PermisoController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre' => 'required|string|unique:permisos,nombre',
+            'name' => 'required|string|unique:permissions,name',
             'descripcion' => 'nullable|string',
             'url' => 'nullable|string',
         ]);
 
-        $permiso = Permiso::create($data);
+        // 👇 Agregamos automáticamente el guard_name
+        $data['guard_name'] = 'web';
+
+        $permiso = Permission::create($data);
 
         return response()->json([
             'message' => 'Permiso creado correctamente',
@@ -42,13 +44,16 @@ class PermisoController extends Controller
     public function actualizar(Request $request)
     {
         $data = $request->validate([
-            'id' => 'required|integer|exists:permisos,id',
-            'nombre' => 'required|string|unique:permisos,nombre,' . $request->id,
+            'id' => 'required|integer|exists:permissions,id',
+            'name' => 'required|string|unique:permissions,name,' . $request->id,
             'descripcion' => 'nullable|string',
             'url' => 'nullable|string',
         ]);
 
-        $permiso = Permiso::findOrFail($data['id']);
+        // 👇 También nos aseguramos de incluirlo en actualización
+        $data['guard_name'] = 'web';
+
+        $permiso = Permission::findOrFail($data['id']);
         $permiso->update($data);
 
         return response()->json([
@@ -63,10 +68,10 @@ class PermisoController extends Controller
     public function eliminar(Request $request)
     {
         $data = $request->validate([
-            'id' => 'required|integer|exists:permisos,id',
+            'id' => 'required|integer|exists:permissions,id',
         ]);
 
-        $permiso = Permiso::findOrFail($data['id']);
+        $permiso = Permission::findOrFail($data['id']);
         $permiso->delete();
 
         return response()->json([

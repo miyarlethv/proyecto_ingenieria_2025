@@ -2,79 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Rol;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RolController extends Controller
 {
-    // Listar todos los roles con sus permisos
     public function index()
     {
-        $roles = Rol::with('permisos')->get();
+        $roles = Role::with('permissions')->get();
         return response()->json($roles);
     }
 
-    // Crear un nuevo rol
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nombre' => 'required|string|unique:roles,nombre',
-            'descripcion' => 'nullable|string',
-            'permisos' => 'array'
+        $request->validate([
+            'name' => 'required|unique:roles,name',
         ]);
 
-        $rol = Rol::create([
-            'nombre' => $data['nombre'],
-            'descripcion' => $data['descripcion'] ?? null
-        ]);
+        $role = Role::create(['name' => $request->name]);
 
-        if (!empty($data['permisos'])) {
-            $rol->permisos()->sync($data['permisos']);
+        if ($request->has('permissions')) {
+            $role->syncPermissions($request->permissions);
         }
 
         return response()->json([
             'message' => 'Rol creado correctamente',
-            'data' => $rol->load('permisos')
+            'data' => $role
         ], 201);
     }
 
-    // Actualizar un rol existente
-    public function actualizar(Request $request)
+    public function show($id)
     {
-        $data = $request->validate([
-            'id' => 'required|integer|exists:roles,id',
-            'nombre' => 'required|string|unique:roles,nombre,' . $request->id,
-            'descripcion' => 'nullable|string',
-            'permisos' => 'array'
+        $role = Role::with('permissions')->findOrFail($id);
+        return response()->json($role);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|unique:roles,name,' . $id,
         ]);
 
-        $rol = Rol::findOrFail($data['id']);
-        $rol->update([
-            'nombre' => $data['nombre'],
-            'descripcion' => $data['descripcion'] ?? null
-        ]);
+        $role = Role::findOrFail($id);
+        $role->update(['name' => $request->name]);
 
-        if (isset($data['permisos'])) {
-            $rol->permisos()->sync($data['permisos']);
+        if ($request->has('permissions')) {
+            $role->syncPermissions($request->permissions);
         }
 
         return response()->json([
             'message' => 'Rol actualizado correctamente',
-            'data' => $rol->load('permisos')
+            'data' => $role
         ]);
     }
 
-    // Eliminar un rol
-    public function eliminar(Request $request)
+    public function destroy($id)
     {
-        $request->validate([
-            'id' => 'required|integer|exists:roles,id'
-        ]);
-
-        $rol = Rol::findOrFail($request->id);
-        $rol->delete();
+        $role = Role::findOrFail($id);
+        $role->delete();
 
         return response()->json(['message' => 'Rol eliminado correctamente']);
+    }
+
+    public function permissions()
+    {
+        $permissions = Permission::all();
+        return response()->json($permissions);
     }
 }
