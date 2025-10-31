@@ -3,33 +3,39 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 class Rol extends SpatieRole
 {
     use HasFactory;
 
-    // Nombre real de la tabla
     protected $table = 'roles';
 
-    // Campos que se pueden asignar masivamente
     protected $fillable = [
-        'name',         // Spatie usa "name" internamente
-        'descripcion',  // campo adicional personalizado
-        'guard_name',   // necesario para Spatie
+        'name',
+        'descripcion',
+        'guard_name',
     ];
 
     /**
-     * Relación con permisos (permiso_rol)
+     * Relación personalizada con permisos (en español)
      */
-    public function permisos()
+    public function permisos(): BelongsToMany
     {
-        // Usa el modelo personalizado Permiso (que extiende de Spatie\Permission\Models\Permission)
         return $this->belongsToMany(
             Permiso::class,
-            'role_has_permissions', // nombre real de la tabla pivote de Spatie
+            'role_has_permissions',
             'role_id',
             'permission_id'
         );
+    }
+
+    /**
+     * Alias en inglés para mantener compatibilidad con Spatie
+     */
+    public function permissions(): BelongsToMany
+    {
+        return $this->permisos();
     }
 }

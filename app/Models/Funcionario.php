@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable; // ✅ Importante para login
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\HasApiTokens; // ✅ Para tokens API
 use Spatie\Permission\Traits\HasRoles;
 
-class Funcionario extends Model
+class Funcionario extends Authenticatable
 {
-    use HasFactory, HasRoles;
+    use HasApiTokens, HasFactory, HasRoles;
 
     // Nombre de la tabla
     protected $table = 'funcionarios';
@@ -21,7 +22,6 @@ class Funcionario extends Model
         'nit',
         'telefono',
         'email',
-        'rol_id',
         'password',
     ];
 
@@ -43,10 +43,10 @@ class Funcionario extends Model
     }
 
     /**
-     * 🔗 Relación con la tabla roles (si aún la usas en tu sistema)
+     * 🔒 Oculta campos sensibles en las respuestas JSON
      */
-    public function rol()
-    {
-        return $this->belongsTo(Rol::class, 'rol_id');
-    }
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }
