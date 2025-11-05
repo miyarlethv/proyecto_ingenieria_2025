@@ -22,7 +22,7 @@ Route::post('login', [InicioSesionController::class, 'login']);
 
 // Fundaciones
 Route::get('Fundacion', [FundacionController::class, 'index']);
-Route::post('crearFundacion', [FundacionController::class, 'crear']);
+Route::post('/crearFundacion', [FundacionController::class, 'crear']);
 Route::get('traerPersonaIdFundacion', [FundacionController::class, 'traerPersonaId']);
 Route::post('actualizarFundacion', [FundacionController::class, 'actualizar']);
 Route::post('eliminarPorIdFundacion', [FundacionController::class, 'eliminarPorId']);

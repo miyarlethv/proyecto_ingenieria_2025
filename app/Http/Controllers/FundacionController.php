@@ -22,30 +22,32 @@ class FundacionController extends Controller
      * Store a newly created resource in storage.
      */
     // Crear nueva fundacion
-    public function crear(Request $request)
-    {
-        $request->validate([
-            'nombre' => 'required',
-            'nit' => 'required|unique:fundaciones',
-            'email' => 'required|email|unique:fundaciones',
-            'telefono' => 'required',
-            'direccion' => 'required',
-            'password' => 'required|min:8',
-            'slogan' => 'required',
-            'logo' => 'required',  
+   public function crear(Request $request)
+{
+    $request->validate([
+        'nombre' => 'required',
+        'nit' => 'required|unique:fundaciones',
+        'email' => 'required|email|unique:fundaciones',
+        'telefono' => 'required',
+        'direccion' => 'required',
+        'password' => 'required|min:8',
+        'slogan' => 'required',
+        'logo' => 'required|image|mimes:jpg,png,jpeg|max:2048',
     ]);
 
     if ($request->hasFile('logo')) {
-        // Guarda en storage/app/public/logos y devuelve ruta relativa como logos/archivo.jpg
         $path = $request->file('logo')->store('logos', 'public');
-        $request->merge(['logo' => $path]);  // guarda solo ruta relativa en el request
+        $request->merge(['logo' => $path]);
     }
 
-    
-
     $fundacion = Fundacion::crear($request->all());
-    return response()->json(data: $fundacion, status: 200);
+
+    // 🔗 Agrega la URL pública
+    $fundacion->logo_url = asset('storage/' . $fundacion->logo);
+
+    return response()->json($fundacion, 201);
 }
+
     /**
      * Display the specified resource.
      */
