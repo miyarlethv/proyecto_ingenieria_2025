@@ -46,7 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
     Route::middleware('can:editar historia')->put('ActualizarHistoriaClinica', [HistoriaClinicaController::class, 'actualizar']);
     Route::middleware('can:eliminar historia')->put('EliminarHistoriaClinica', [HistoriaClinicaController::class, 'eliminar']);
-
+    Route::get('/mascotas/aleatorias', [MascotaController::class, 'aleatorias']);
+    
     // Roles
     Route::middleware('role:admin')->group(function () {
         Route::post('CrearRol', [RolController::class, 'store']);
