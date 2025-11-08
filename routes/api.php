@@ -32,6 +32,8 @@ Route::post('CrearMascotas', [MascotaController::class, 'crear']);
 Route::get('mascotas', [MascotaController::class, 'index']);
 Route::put('ActualizarMascotas', [MascotaController::class, 'actualizar']);
 Route::put('EliminarMascotas', [MascotaController::class, 'eliminar']);
+Route::get('/mascotas/aleatorias', [MascotaController::class, 'aleatorias']);
+
 
 
 // Historias Clinicas

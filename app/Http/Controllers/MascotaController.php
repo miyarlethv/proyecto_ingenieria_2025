@@ -29,7 +29,6 @@ class MascotaController extends Controller
             $validated['foto'] = $fotoPath;
         }
 
-        // Se crea habilitada por defecto
         $mascota = Mascota::create($validated + ['estado' => 'habilitado']);
 
         return response()->json([
@@ -38,7 +37,7 @@ class MascotaController extends Controller
         ], 201);
     }
 
-    // Actualizar una mascota
+    // 👉 Actualizar una mascota
     public function actualizar(Request $request)
     {
         $validated = $request->validate([
@@ -64,7 +63,7 @@ class MascotaController extends Controller
         ], 200);
     }
 
-    // 👉 Deshabilitar (no eliminar) una mascota
+    // 👉 Deshabilitar (no eliminar)
     public function eliminar(Request $request)
     {
         $validated = $request->validate([
@@ -81,10 +80,28 @@ class MascotaController extends Controller
         ], 200);
     }
 
-    // 👉 (Opcional) Mostrar todas (habilitadas y deshabilitadas)
+    // 👉 Mostrar todas (opcional)
     public function listarTodas()
     {
         $mascotas = Mascota::all();
+        return response()->json($mascotas, 200);
+    }
+
+    // 👉 NUEVO: Obtener 10 mascotas habilitadas aleatorias
+    public function aleatorias()
+    {
+        $mascotas = Mascota::where('estado', 'habilitado')
+            ->inRandomOrder()
+            ->take(10)
+            ->get();
+
+        $mascotas->transform(function ($mascota) {
+            if ($mascota->foto) {
+                $mascota->foto = asset('storage/' . $mascota->foto);
+            }
+            return $mascota;
+        });
+
         return response()->json($mascotas, 200);
     }
 }
