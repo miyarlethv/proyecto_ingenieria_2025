@@ -35,10 +35,14 @@ class InicioSesionController extends Controller
         // 🔹 2️⃣ Verificar si es una Fundación
         $fundacion = Fundacion::where('email', $request->email)->first();
         if ($fundacion && Hash::check($request->password, $fundacion->password)) {
+            // Crear token de API para la fundación
+            $token = $fundacion->createToken('fundacion_token')->plainTextToken;
+
             return response()->json([
                 'message' => 'Inicio de sesión exitoso',
                 'tipo' => 'fundacion',
                 'nombre' => $fundacion->nombre,
+                'token' => $token,
                 'data' => $fundacion
             ], 200);
         }
