@@ -19,6 +19,12 @@ class HistoriaClinicaController extends Controller
             'tipo' => 'nullable|string',
         ]);
 
+        // Si la petición viene autenticada (funcionario), validar permiso
+        if ($request->user()) {
+            if (!$request->user()->can('crear historia')) {
+                return response()->json(['message' => 'No tienes permiso para crear historias clínicas'], 403);
+            }
+        }
         $historia = HistoriaClinica::create([
             'mascota_id' => $request->mascota_id,
             'fecha' => $request->fecha,
@@ -61,6 +67,13 @@ class HistoriaClinicaController extends Controller
 
             $historia = HistoriaClinica::findOrFail($request->id);
 
+            // Si la petición viene autenticada (funcionario), validar permiso
+            if ($request->user()) {
+                if (!$request->user()->can('editar historia')) {
+                    return response()->json(['message' => 'No tienes permiso para editar historias clínicas'], 403);
+                }
+            }
+
             $historia->update([
                 'fecha' => $request->fecha,
                 'descripcion' => $request->descripcion,
@@ -91,6 +104,12 @@ class HistoriaClinicaController extends Controller
             ]);
 
             $historia = HistoriaClinica::findOrFail($request->id);
+            // Si la petición viene autenticada (funcionario), validar permiso
+            if ($request->user()) {
+                if (!$request->user()->can('eliminar historia')) {
+                    return response()->json(['message' => 'No tienes permiso para eliminar historias clínicas'], 403);
+                }
+            }
             $historia->delete();
 
             return response()->json([
