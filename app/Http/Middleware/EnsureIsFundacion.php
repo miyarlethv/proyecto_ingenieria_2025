@@ -15,8 +15,15 @@ class EnsureIsFundacion
     {
         $user = $request->user();
 
+        // 🔍 DEBUG ampliado
+        Log::info('🔍 EnsureIsFundacion: INICIO', [
+            'path' => $request->path(),
+            'auth_header' => $request->header('authorization'),
+            'user' => $user ? get_class($user).':'.$user->id : 'NULL',
+        ]);
+
         if (! $user) {
-            Log::info('EnsureIsFundacion: request without user', ['path' => $request->path(), 'headers' => [$request->header('authorization')]]);
+            Log::warning('⚠️ EnsureIsFundacion: request without user', ['path' => $request->path()]);
             return response()->json(['message' => 'No autenticado. Se requiere token de fundación.'], 401);
         }
 
