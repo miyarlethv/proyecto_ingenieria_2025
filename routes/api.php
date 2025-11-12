@@ -9,11 +9,18 @@ use App\Http\Controllers\{
     HistoriaClinicaController,
     RolController,
     PermisoController,
-    FuncionarioController
+    FuncionarioController,
+    AuthController
 };
 
 // LOGIN (funcionarios y fundaciones)
 Route::post('login', [InicioSesionController::class, 'login'])->name('login');
+
+// AUTH: obtener info del usuario autenticado y logout
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('me', [AuthController::class, 'me']);
+    Route::post('logout', [AuthController::class, 'logout']);
+});
 
 // Public: crear fundacion y personas (registro)
 Route::post('crearFundacion', [FundacionController::class, 'crear']);
