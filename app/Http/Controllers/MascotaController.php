@@ -57,11 +57,9 @@ class MascotaController extends Controller
 
         $mascota = Mascota::findOrFail($validated['id']);
 
-        // Si la petición viene autenticada (funcionario), validar permiso
-        if ($request->user()) {
-            if (!$request->user()->can('editar mascotas')) {
-                return response()->json(['message' => 'No tienes permiso para editar mascotas'], 403);
-            }
+        // Validar permiso
+        if (!$request->user()->can('Editar mascotas')) {
+            return response()->json(['message' => 'No tienes permiso para editar mascotas'], 403);
         }
 
         if ($request->hasFile('foto')) {

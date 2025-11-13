@@ -63,14 +63,14 @@ Route::middleware(['auth:sanctum', \App\Http\Middleware\EnsureIsFundacion::class
     Route::put('EliminarFuncionario', [FuncionarioController::class, 'eliminar']);
 });
 
-// RUTAS PARA FUNCIONARIOS AUTENTICADOS (sujetas a permisos Spatie)
+// RUTAS PARA FUNCIONARIOS AUTENTICADOS (permisos validados en controlador)
 Route::middleware('auth:sanctum')->group(function () {
-    Route::middleware('can:crear mascotas')->post('CrearMascotas', [MascotaController::class, 'crear']);
-    Route::middleware('can:editar mascotas')->put('ActualizarMascotas', [MascotaController::class, 'actualizar']);
-    Route::middleware('can:eliminar mascotas')->put('EliminarMascotas', [MascotaController::class, 'eliminar']);
+    Route::post('CrearMascotas', [MascotaController::class, 'crear']);
+    Route::post('ActualizarMascotas', [MascotaController::class, 'actualizar']);
+    Route::post('EliminarMascotas', [MascotaController::class, 'eliminar']);
 
     Route::middleware('can:crear historia')->post('CrearHistoriaClinica', [HistoriaClinicaController::class, 'crear']);
-    Route::middleware('can:editar historia')->put('ActualizarHistoriaClinica', [HistoriaClinicaController::class, 'actualizar']);
-    Route::middleware('can:eliminar historia')->put('EliminarHistoriaClinica', [HistoriaClinicaController::class, 'eliminar']);
+    Route::middleware('can:editar historia')->post('ActualizarHistoriaClinica', [HistoriaClinicaController::class, 'actualizar']);
+    Route::middleware('can:eliminar historia')->post('EliminarHistoriaClinica', [HistoriaClinicaController::class, 'eliminar']);
     Route::get('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
 });
