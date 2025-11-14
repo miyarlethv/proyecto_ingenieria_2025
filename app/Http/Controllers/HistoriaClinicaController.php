@@ -16,19 +16,27 @@ class HistoriaClinicaController extends Controller
             'mascota_id' => 'required|exists:mascotas,id',
             'fecha' => 'required|date',
             'descripcion' => 'required|string',
+            'nombre_responsable' => 'nullable|string',
+            'telefono' => 'nullable|string',
+            'cargo' => 'nullable|string',
             'tipo' => 'nullable|string',
         ]);
 
-        // Si la petición viene autenticada (funcionario), validar permiso
-        if ($request->user()) {
-            if (!$request->user()->can('crear historia')) {
+        // Validar permiso solo si es funcionario (fundación tiene acceso total)
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            if (!$user->can('crear historia')) {
                 return response()->json(['message' => 'No tienes permiso para crear historias clínicas'], 403);
             }
         }
+
         $historia = HistoriaClinica::create([
             'mascota_id' => $request->mascota_id,
             'fecha' => $request->fecha,
             'descripcion' => $request->descripcion,
+            'nombre_responsable' => $request->nombre_responsable,
+            'telefono' => $request->telefono,
+            'cargo' => $request->cargo,
             'tipo' => $request->tipo,
         ]);
 
@@ -62,14 +70,18 @@ class HistoriaClinicaController extends Controller
                 'id' => 'required|integer|exists:historias_clinicas,id',
                 'fecha' => 'required|date',
                 'descripcion' => 'required|string',
+                'nombre_responsable' => 'nullable|string',
+                'telefono' => 'nullable|string',
+                'cargo' => 'nullable|string',
                 'tipo' => 'nullable|string',
             ]);
 
             $historia = HistoriaClinica::findOrFail($request->id);
 
-            // Si la petición viene autenticada (funcionario), validar permiso
-            if ($request->user()) {
-                if (!$request->user()->can('editar historia')) {
+            // Validar permiso solo si es funcionario (fundación tiene acceso total)
+            $user = $request->user();
+            if ($user instanceof \App\Models\Funcionario) {
+                if (!$user->can('editar historia')) {
                     return response()->json(['message' => 'No tienes permiso para editar historias clínicas'], 403);
                 }
             }
@@ -77,6 +89,9 @@ class HistoriaClinicaController extends Controller
             $historia->update([
                 'fecha' => $request->fecha,
                 'descripcion' => $request->descripcion,
+                'nombre_responsable' => $request->nombre_responsable,
+                'telefono' => $request->telefono,
+                'cargo' => $request->cargo,
                 'tipo' => $request->tipo,
             ]);
 
@@ -104,12 +119,15 @@ class HistoriaClinicaController extends Controller
             ]);
 
             $historia = HistoriaClinica::findOrFail($request->id);
-            // Si la petición viene autenticada (funcionario), validar permiso
-            if ($request->user()) {
-                if (!$request->user()->can('eliminar historia')) {
+            
+            // Validar permiso solo si es funcionario (fundación tiene acceso total)
+            $user = $request->user();
+            if ($user instanceof \App\Models\Funcionario) {
+                if (!$user->can('eliminar historia')) {
                     return response()->json(['message' => 'No tienes permiso para eliminar historias clínicas'], 403);
                 }
             }
+            
             $historia->delete();
 
             return response()->json([

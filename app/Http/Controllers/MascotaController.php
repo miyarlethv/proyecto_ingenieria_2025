@@ -24,9 +24,10 @@ class MascotaController extends Controller
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Si la petición viene autenticada (funcionario), validar permiso
-        if ($request->user()) {
-            if (!$request->user()->can('crear mascotas')) {
+        // Validar permiso solo si es funcionario (fundación tiene acceso total)
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            if (!$user->can('crear mascotas')) {
                 return response()->json(['message' => 'No tienes permiso para crear mascotas'], 403);
             }
         }
@@ -57,9 +58,12 @@ class MascotaController extends Controller
 
         $mascota = Mascota::findOrFail($validated['id']);
 
-        // Validar permiso
-        if (!$request->user()->can('Editar mascotas')) {
-            return response()->json(['message' => 'No tienes permiso para editar mascotas'], 403);
+        // Validar permiso solo si es funcionario (fundación tiene acceso total)
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            if (!$user->can('Editar mascotas')) {
+                return response()->json(['message' => 'No tienes permiso para editar mascotas'], 403);
+            }
         }
 
         if ($request->hasFile('foto')) {
@@ -83,12 +87,15 @@ class MascotaController extends Controller
         ]);
 
         $mascota = Mascota::findOrFail($validated['id']);
-        // Si la petición viene autenticada (funcionario), validar permiso
-        if ($request->user()) {
-            if (!$request->user()->can('eliminar mascotas')) {
+        
+        // Validar permiso solo si es funcionario (fundación tiene acceso total)
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            if (!$user->can('eliminar mascotas')) {
                 return response()->json(['message' => 'No tienes permiso para eliminar mascotas'], 403);
             }
         }
+        
         $mascota->estado = 'deshabilitado';
         $mascota->save();
 

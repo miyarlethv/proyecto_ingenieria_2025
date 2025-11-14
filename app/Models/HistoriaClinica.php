@@ -21,6 +21,9 @@ class HistoriaClinica extends Model
         'mascota_id',
         'fecha',
         'descripcion',
+        'nombre_responsable',
+        'telefono',
+        'cargo',
         'tipo',
     ];
 

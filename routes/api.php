@@ -38,6 +38,9 @@ Route::post('eliminarPorId', [PersonaController::class, 'eliminarPorId']);
 Route::get('/mascotas/aleatorias', [MascotaController::class, 'aleatorias']);
 Route::get('mascotas', [MascotaController::class, 'index']);
 
+// Ruta pública para obtener funcionarios con roles (para formularios)
+Route::get('ListarFuncionariosConRoles', [FuncionarioController::class, 'listarConRoles']);
+
 // ADMIN (solo Fundacion autenticada): crear/gestionar roles, permisos y funcionarios
 Route::middleware(['auth:sanctum', \App\Http\Middleware\EnsureIsFundacion::class])->group(function () {
     // Fundacion puede actualizar o eliminar su propia entidad
@@ -63,14 +66,16 @@ Route::middleware(['auth:sanctum', \App\Http\Middleware\EnsureIsFundacion::class
     Route::put('EliminarFuncionario', [FuncionarioController::class, 'eliminar']);
 });
 
-// RUTAS PARA FUNCIONARIOS AUTENTICADOS (permisos validados en controlador)
+// RUTAS PARA FUNCIONARIOS Y FUNDACIONES AUTENTICADOS (permisos validados en controlador)
 Route::middleware('auth:sanctum')->group(function () {
+    // Mascotas
     Route::post('CrearMascotas', [MascotaController::class, 'crear']);
     Route::post('ActualizarMascotas', [MascotaController::class, 'actualizar']);
     Route::post('EliminarMascotas', [MascotaController::class, 'eliminar']);
 
-    Route::middleware('can:crear historia')->post('CrearHistoriaClinica', [HistoriaClinicaController::class, 'crear']);
-    Route::middleware('can:editar historia')->post('ActualizarHistoriaClinica', [HistoriaClinicaController::class, 'actualizar']);
-    Route::middleware('can:eliminar historia')->post('EliminarHistoriaClinica', [HistoriaClinicaController::class, 'eliminar']);
+    // Historias clínicas
+    Route::post('CrearHistoriaClinica', [HistoriaClinicaController::class, 'crear']);
+    Route::put('ActualizarHistoriaClinica', [HistoriaClinicaController::class, 'actualizar']);
+    Route::put('EliminarHistoriaClinica', [HistoriaClinicaController::class, 'eliminar']);
     Route::get('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
 });
