@@ -10,11 +10,31 @@ use App\Http\Controllers\{
     RolController,
     PermisoController,
     FuncionarioController,
+    ProductoController,
+    CategoriaController,
+    NombreController,
     AuthController
 };
 
-// LOGIN (funcionarios y fundaciones)
-Route::post('login', [InicioSesionController::class, 'login'])->name('login');
+// LOGIN
+
+Route::post('login', [InicioSesionController::class, 'login']);
+
+// RUTAS PÚBLICAS - Productos
+Route::get('productos', [ProductoController::class, 'index']);
+Route::post('CrearProducto', [ProductoController::class, 'store']);
+Route::post('ActualizarProducto', [ProductoController::class, 'update']);
+Route::post('EliminarProducto', [ProductoController::class, 'destroy']);
+
+
+Route::get('/categorias', [CategoriaController::class, 'index']);
+Route::get('/nombres', [CategoriaController::class, 'getNombres']);
+Route::post('/CrearCategoria', [CategoriaController::class, 'crearCategoria']);
+Route::post('/CrearNombre', [CategoriaController::class, 'crearNombre']);
+Route::post('/ActualizarCategoria', [CategoriaController::class, 'actualizarCategoria']);
+Route::post('/ActualizarNombre', [CategoriaController::class, 'actualizarNombre']);
+Route::post('/EliminarCategoria', [CategoriaController::class, 'eliminarCategoria']);
+Route::post('/EliminarNombre', [CategoriaController::class, 'eliminarNombre']);
 
 // AUTH: obtener info del usuario autenticado y logout
 Route::middleware('auth:sanctum')->group(function () {
@@ -59,7 +79,7 @@ Route::middleware(['auth:sanctum', \App\Http\Middleware\EnsureIsFundacion::class
     Route::put('ActualizarPermiso', [PermisoController::class, 'actualizar']);
     Route::put('EliminarPermiso', [PermisoController::class, 'eliminar']);
 
-    // Funcionarios
+    // Funcionarios (solo fundación puede gestionarlos)
     Route::get('ListarFuncionarios', [FuncionarioController::class, 'index']);
     Route::post('CrearFuncionario', [FuncionarioController::class, 'store']);
     Route::put('ActualizarFuncionario', [FuncionarioController::class, 'actualizar']);
