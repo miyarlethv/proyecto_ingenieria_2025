@@ -28,6 +28,7 @@ class InicioSesionController extends Controller
                 'message' => 'Inicio de sesión exitoso',
                 'tipo' => 'persona',
                 'nombre' => $persona->nombre,
+                'token' => $persona->createToken('auth_token')->plainTextToken,
                 'data' => $persona
             ], 200);
         }
@@ -39,6 +40,7 @@ class InicioSesionController extends Controller
                 'message' => 'Inicio de sesión exitoso',
                 'tipo' => 'fundacion',
                 'nombre' => $fundacion->nombre,
+                'token' => $fundacion->createToken('auth_token')->plainTextToken,
                 'data' => $fundacion
             ], 200);
         }
