@@ -9,13 +9,32 @@ use App\Http\Controllers\{
     HistoriaClinicaController,
     RolController,
     PermisoController,
-    FuncionarioController
+    FuncionarioController,
+    ProductoController,
+    CategoriaController,
+    NombreController
+    
 };
 
 // LOGIN
 
 Route::post('login', [InicioSesionController::class, 'login']);
 
+// RUTAS PÚBLICAS - Productos
+Route::get('productos', [ProductoController::class, 'index']);
+Route::post('CrearProducto', [ProductoController::class, 'store']);
+Route::post('ActualizarProducto', [ProductoController::class, 'update']);
+Route::post('EliminarProducto', [ProductoController::class, 'destroy']);
+
+
+Route::get('/categorias', [CategoriaController::class, 'index']);
+Route::get('/nombres', [CategoriaController::class, 'getNombres']);
+Route::post('/CrearCategoria', [CategoriaController::class, 'crearCategoria']);
+Route::post('/CrearNombre', [CategoriaController::class, 'crearNombre']);
+Route::post('/ActualizarCategoria', [CategoriaController::class, 'actualizarCategoria']);
+Route::post('/ActualizarNombre', [CategoriaController::class, 'actualizarNombre']);
+Route::post('/EliminarCategoria', [CategoriaController::class, 'eliminarCategoria']);
+Route::post('/EliminarNombre', [CategoriaController::class, 'eliminarNombre']);
 
 // RUTAS PROTEGIDAS
 
@@ -70,5 +89,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('CrearFuncionario', [FuncionarioController::class, 'store']);
         Route::put('ActualizarFuncionario', [FuncionarioController::class, 'actualizar']);
         Route::put('EliminarFuncionario', [FuncionarioController::class, 'eliminar']);
+
+        
+
+
+
     });
 });
