@@ -36,7 +36,7 @@ class ProductoController extends Controller
     {
         $request->validate([
             'categoria_id' => 'nullable|exists:categorias,id',
-            'nombre_id' => 'nullable|exists:nombres,id',
+            'nombre_id' => 'nullable|exists:producto_nombres,id',
             'cantidad' => 'required|integer|min:0',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -63,7 +63,7 @@ class ProductoController extends Controller
         $request->validate([
             'id' => 'required|exists:productos,id',
             'categoria_id' => 'nullable|exists:categorias,id',
-            'nombre_id' => 'nullable|exists:nombres,id',
+            'nombre_id' => 'nullable|exists:producto_nombres,id',
             'cantidad' => 'required|integer|min:0',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
