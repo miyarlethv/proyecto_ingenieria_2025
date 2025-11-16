@@ -9,14 +9,23 @@ class Nombre extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'producto_nombres';
+
     protected $fillable = [
         'nombre',
+        'categoria_id',
         'activo'
     ];
 
     protected $casts = [
         'activo' => 'boolean'
     ];
+
+    // Relación con categoría
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
 
     // Relación con productos
     public function productos()

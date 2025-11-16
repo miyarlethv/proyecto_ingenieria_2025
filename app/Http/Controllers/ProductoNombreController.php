@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Nombre;
 
-class NombreController extends Controller
+class ProductoNombreController extends Controller
 {
     // Listar todos los nombres activos
     public function index()
@@ -31,7 +31,7 @@ class NombreController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:100|unique:nombres',
+            'nombre' => 'required|string|max:100|unique:producto_nombres',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
 
@@ -50,8 +50,8 @@ class NombreController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:nombres,id',
-            'nombre' => 'required|string|max:100|unique:nombres,nombre,' . $request->id,
+            'id' => 'required|exists:producto_nombres,id',
+            'nombre' => 'required|string|max:100|unique:producto_nombres,nombre,' . $request->id,
             'categoria_id' => 'required|exists:categorias,id',
         ]);
 
@@ -69,7 +69,7 @@ class NombreController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:nombres,id',
+            'id' => 'required|exists:producto_nombres,id',
         ]);
 
         $nombre = Nombre::findOrFail($request->id);
