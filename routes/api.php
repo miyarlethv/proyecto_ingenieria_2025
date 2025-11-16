@@ -12,7 +12,7 @@ use App\Http\Controllers\{
     FuncionarioController,
     ProductoController,
     CategoriaController,
-    NombreController
+    ProductoNombreController
     
 };
 
@@ -28,13 +28,14 @@ Route::post('EliminarProducto', [ProductoController::class, 'destroy']);
 
 
 Route::get('/categorias', [CategoriaController::class, 'index']);
-Route::get('/nombres', [CategoriaController::class, 'getNombres']);
 Route::post('/CrearCategoria', [CategoriaController::class, 'crearCategoria']);
-Route::post('/CrearNombre', [CategoriaController::class, 'crearNombre']);
 Route::post('/ActualizarCategoria', [CategoriaController::class, 'actualizarCategoria']);
-Route::post('/ActualizarNombre', [CategoriaController::class, 'actualizarNombre']);
 Route::post('/EliminarCategoria', [CategoriaController::class, 'eliminarCategoria']);
-Route::post('/EliminarNombre', [CategoriaController::class, 'eliminarNombre']);
+
+Route::get('/nombres', [ProductoNombreController::class, 'index']);
+Route::post('/CrearNombre', [ProductoNombreController::class, 'store']);
+Route::post('/ActualizarNombre', [ProductoNombreController::class, 'update']);
+Route::post('/EliminarNombre', [ProductoNombreController::class, 'destroy']);
 
 // RUTAS PROTEGIDAS
 
