@@ -34,6 +34,14 @@ class ProductoController extends Controller
     // === Crear producto ===
     public function store(Request $request)
     {
+        // Validar permiso solo si es funcionario
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            if (!$user->can('Crear Productos')) {
+                return response()->json(['message' => 'No tienes permiso para crear productos'], 403);
+            }
+        }
+
         $request->validate([
             'categoria_id' => 'nullable|exists:categorias,id',
             'nombre_id' => 'nullable|exists:nombres,id',
@@ -60,6 +68,14 @@ class ProductoController extends Controller
     // === Actualizar producto ===
     public function update(Request $request)
     {
+        // Validar permiso solo si es funcionario
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            if (!$user->can('Editar Productos')) {
+                return response()->json(['message' => 'No tienes permiso para editar productos'], 403);
+            }
+        }
+
         $request->validate([
             'id' => 'required|exists:productos,id',
             'categoria_id' => 'nullable|exists:categorias,id',
@@ -90,6 +106,14 @@ class ProductoController extends Controller
     // === Eliminar producto (deshabilitar) ===
     public function destroy(Request $request)
     {
+        // Validar permiso solo si es funcionario
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            if (!$user->can('Eliminar Productos')) {
+                return response()->json(['message' => 'No tienes permiso para eliminar productos'], 403);
+            }
+        }
+
         $request->validate([
             'id' => 'required|exists:productos,id',
         ]);

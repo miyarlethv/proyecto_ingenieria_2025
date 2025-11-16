@@ -13,28 +13,18 @@ use App\Http\Controllers\{
     ProductoController,
     CategoriaController,
     NombreController,
-    AuthController
+    AuthController,
+    SolicitudAdopcionController
 };
 
 // LOGIN
 
 Route::post('login', [InicioSesionController::class, 'login']);
 
-// RUTAS PÚBLICAS - Productos
+// RUTAS PÚBLICAS - Lectura de productos, categorías y nombres
 Route::get('productos', [ProductoController::class, 'index']);
-Route::post('CrearProducto', [ProductoController::class, 'store']);
-Route::post('ActualizarProducto', [ProductoController::class, 'update']);
-Route::post('EliminarProducto', [ProductoController::class, 'destroy']);
-
-
 Route::get('/categorias', [CategoriaController::class, 'index']);
 Route::get('/nombres', [CategoriaController::class, 'getNombres']);
-Route::post('/CrearCategoria', [CategoriaController::class, 'crearCategoria']);
-Route::post('/CrearNombre', [CategoriaController::class, 'crearNombre']);
-Route::post('/ActualizarCategoria', [CategoriaController::class, 'actualizarCategoria']);
-Route::post('/ActualizarNombre', [CategoriaController::class, 'actualizarNombre']);
-Route::post('/EliminarCategoria', [CategoriaController::class, 'eliminarCategoria']);
-Route::post('/EliminarNombre', [CategoriaController::class, 'eliminarNombre']);
 
 // AUTH: obtener info del usuario autenticado y logout
 Route::middleware('auth:sanctum')->group(function () {
@@ -98,4 +88,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('ActualizarHistoriaClinica', [HistoriaClinicaController::class, 'actualizar']);
     Route::put('EliminarHistoriaClinica', [HistoriaClinicaController::class, 'eliminar']);
     Route::get('ListarHistoriasClinicas', [HistoriaClinicaController::class, 'index']);
+
+    // Solicitudes de adopción
+    Route::post('solicitudes-adopcion', [SolicitudAdopcionController::class, 'store']); // Crear solicitud
+    Route::get('solicitudes-adopcion', [SolicitudAdopcionController::class, 'index']); // Listar solicitudes
+    Route::get('solicitudes-adopcion/mis-solicitudes', [SolicitudAdopcionController::class, 'misSolicitudes']); // Mis solicitudes
+    Route::get('solicitudes-adopcion/{id}', [SolicitudAdopcionController::class, 'show']); // Ver detalle
+    Route::post('solicitudes-adopcion/{id}/estado', [SolicitudAdopcionController::class, 'updateEstado']); // Aprobar/Rechazar
+    Route::post('solicitudes-adopcion/{id}/eliminar', [SolicitudAdopcionController::class, 'destroy']); // Eliminar solicitud
+
+    // Productos (autenticados)
+    Route::post('CrearProducto', [ProductoController::class, 'store']);
+    Route::post('ActualizarProducto', [ProductoController::class, 'update']);
+    Route::post('EliminarProducto', [ProductoController::class, 'destroy']);
+
+    // Categorías y Nombres (autenticados)
+    Route::post('/CrearCategoria', [CategoriaController::class, 'crearCategoria']);
+    Route::post('/CrearNombre', [CategoriaController::class, 'crearNombre']);
+    Route::post('/ActualizarCategoria', [CategoriaController::class, 'actualizarCategoria']);
+    Route::post('/ActualizarNombre', [CategoriaController::class, 'actualizarNombre']);
+    Route::post('/EliminarCategoria', [CategoriaController::class, 'eliminarCategoria']);
+    Route::post('/EliminarNombre', [CategoriaController::class, 'eliminarNombre']);
 });
