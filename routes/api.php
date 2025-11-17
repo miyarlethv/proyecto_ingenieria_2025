@@ -12,9 +12,14 @@ use App\Http\Controllers\{
     FuncionarioController,
     ProductoController,
     CategoriaController,
+<<<<<<< HEAD
     NombreController,
     AuthController,
     SolicitudAdopcionController
+=======
+    ProductoNombreController
+    
+>>>>>>> origin/main
 };
 
 // LOGIN
@@ -24,7 +29,20 @@ Route::post('login', [InicioSesionController::class, 'login']);
 // RUTAS PÚBLICAS - Lectura de productos, categorías y nombres
 Route::get('productos', [ProductoController::class, 'index']);
 Route::get('/categorias', [CategoriaController::class, 'index']);
+<<<<<<< HEAD
 Route::get('/nombres', [CategoriaController::class, 'getNombres']);
+=======
+Route::post('/CrearCategoria', [CategoriaController::class, 'crearCategoria']);
+Route::post('/ActualizarCategoria', [CategoriaController::class, 'actualizarCategoria']);
+Route::post('/EliminarCategoria', [CategoriaController::class, 'eliminarCategoria']);
+
+Route::get('/nombres', [ProductoNombreController::class, 'index']);
+Route::post('/CrearNombre', [ProductoNombreController::class, 'store']);
+Route::post('/ActualizarNombre', [ProductoNombreController::class, 'update']);
+Route::post('/EliminarNombre', [ProductoNombreController::class, 'destroy']);
+
+// RUTAS PROTEGIDAS
+>>>>>>> origin/main
 
 // AUTH: obtener info del usuario autenticado y logout
 Route::middleware('auth:sanctum')->group(function () {

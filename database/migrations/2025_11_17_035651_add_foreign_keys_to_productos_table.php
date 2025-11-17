@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('productos', function (Blueprint $table) {
             // Agregar columnas de foreign keys
-            $table->foreignId('categoria_id')->nullable()->after('id')->constrained('categorias')->onDelete('set null');
-            $table->foreignId('nombre_id')->nullable()->after('categoria_id')->constrained('nombres')->onDelete('set null');
+            $table->foreignId('categoria_id')->nullable()->after('foto')->constrained('categorias')->onDelete('set null');
+            $table->foreignId('nombre_id')->nullable()->after('categoria_id')->constrained('producto_nombres')->onDelete('set null');
             
             // Hacer que los campos antiguos sean opcionales
             $table->string('nombre')->nullable()->change();
