@@ -127,7 +127,10 @@ class SolicitudAdopcionController extends Controller
 
         // Validar permiso si es funcionario
         if ($user instanceof \App\Models\Funcionario) {
-            if (!$user->can('Gestionar Solicitudes de Adopción')) {
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'solicitudes-adopcion';
+            });
+            if (!$tienePermiso) {
                 return response()->json(['message' => 'No tienes permiso para gestionar solicitudes de adopción'], 403);
             }
         }
@@ -140,7 +143,22 @@ class SolicitudAdopcionController extends Controller
             ], 400);
         }
 
-        $solicitud->update(['estado' => $validated['estado']]);
+            // Crear notificación para el usuario según el estado
+            if ($validated['estado'] === 'aprobada') {
+                \App\Models\Notification::create([
+                    'persona_id' => $solicitud->persona_id,
+                    'title' => '¡Tu solicitud de adopción fue aprobada!',
+                    'message' => 'La solicitud para adoptar a ' . ($solicitud->mascota->nombre ?? 'una mascota') . ' fue aprobada. La fundación se comunicará contigo al teléfono registrado.',
+                ]);
+            } elseif ($validated['estado'] === 'rechazada') {
+                \App\Models\Notification::create([
+                    'persona_id' => $solicitud->persona_id,
+                    'title' => 'Tu solicitud de adopción fue rechazada',
+                    'message' => 'La solicitud para adoptar a ' . ($solicitud->mascota->nombre ?? 'una mascota') . ' fue rechazada. Puedes comunicarte con la fundación para más información.',
+                ]);
+            }
+
+            $solicitud->update(['estado' => $validated['estado']]);
 
         return response()->json([
             'message' => "Solicitud {$validated['estado']} exitosamente",

@@ -12,10 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('productos', function (Blueprint $table) {
-            // Agregar columnas de foreign keys
-            $table->foreignId('categoria_id')->nullable()->after('foto')->constrained('categorias')->onDelete('set null');
-            $table->foreignId('nombre_id')->nullable()->after('categoria_id')->constrained('producto_nombres')->onDelete('set null');
-            
+            // Solo agregar la columna si no existe
+            if (!Schema::hasColumn('productos', 'categoria_id')) {
+                $table->foreignId('categoria_id')->nullable()->after('foto')->constrained('categorias')->onDelete('set null');
+            }
+            if (!Schema::hasColumn('productos', 'nombre_id')) {
+                $table->foreignId('nombre_id')->nullable()->after('categoria_id')->constrained('producto_nombres')->onDelete('set null');
+            }
             // Hacer que los campos antiguos sean opcionales
             $table->string('nombre')->nullable()->change();
             $table->string('categoria')->nullable()->change();

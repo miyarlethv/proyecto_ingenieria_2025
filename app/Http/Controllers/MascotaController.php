@@ -27,7 +27,11 @@ class MascotaController extends Controller
         // Validar permiso solo si es funcionario (fundación tiene acceso total)
         $user = $request->user();
         if ($user instanceof \App\Models\Funcionario) {
-            if (!$user->can('crear mascotas')) {
+            // Validar por URL del permiso para coincidir con frontend
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'CrearMascotas';
+            });
+            if (!$tienePermiso) {
                 return response()->json(['message' => 'No tienes permiso para crear mascotas'], 403);
             }
         }
@@ -61,7 +65,11 @@ class MascotaController extends Controller
         // Validar permiso solo si es funcionario (fundación tiene acceso total)
         $user = $request->user();
         if ($user instanceof \App\Models\Funcionario) {
-            if (!$user->can('Editar mascotas')) {
+            // Validar por URL del permiso para coincidir con frontend
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'ActualizarMascotas';
+            });
+            if (!$tienePermiso) {
                 return response()->json(['message' => 'No tienes permiso para editar mascotas'], 403);
             }
         }
@@ -91,7 +99,11 @@ class MascotaController extends Controller
         // Validar permiso solo si es funcionario (fundación tiene acceso total)
         $user = $request->user();
         if ($user instanceof \App\Models\Funcionario) {
-            if (!$user->can('eliminar mascotas')) {
+            // Validar por URL del permiso para coincidir con frontend
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'EliminarMascotas';
+            });
+            if (!$tienePermiso) {
                 return response()->json(['message' => 'No tienes permiso para eliminar mascotas'], 403);
             }
         }

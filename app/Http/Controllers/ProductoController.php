@@ -34,13 +34,17 @@ class ProductoController extends Controller
     // === Crear producto ===
     public function store(Request $request)
     {
-        // Validar permiso solo si es funcionario
+        // Validar permiso solo si es funcionario, la fundación tiene acceso total
         $user = $request->user();
         if ($user instanceof \App\Models\Funcionario) {
-            if (!$user->can('Crear Productos')) {
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'CrearProducto';
+            });
+            if (!$tienePermiso) {
                 return response()->json(['message' => 'No tienes permiso para crear productos'], 403);
             }
         }
+        // Si es fundación, no se valida permiso
 
         $request->validate([
             'categoria_id' => 'nullable|exists:categorias,id',
@@ -68,13 +72,17 @@ class ProductoController extends Controller
     // === Actualizar producto ===
     public function update(Request $request)
     {
-        // Validar permiso solo si es funcionario
+        // Validar permiso solo si es funcionario, la fundación tiene acceso total
         $user = $request->user();
         if ($user instanceof \App\Models\Funcionario) {
-            if (!$user->can('Editar Productos')) {
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'ActualizarProducto';
+            });
+            if (!$tienePermiso) {
                 return response()->json(['message' => 'No tienes permiso para editar productos'], 403);
             }
         }
+        // Si es fundación, no se valida permiso
 
         $request->validate([
             'id' => 'required|exists:productos,id',
@@ -106,13 +114,17 @@ class ProductoController extends Controller
     // === Eliminar producto (deshabilitar) ===
     public function destroy(Request $request)
     {
-        // Validar permiso solo si es funcionario
+        // Validar permiso solo si es funcionario, la fundación tiene acceso total
         $user = $request->user();
         if ($user instanceof \App\Models\Funcionario) {
-            if (!$user->can('Eliminar Productos')) {
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'EliminarProducto';
+            });
+            if (!$tienePermiso) {
                 return response()->json(['message' => 'No tienes permiso para eliminar productos'], 403);
             }
         }
+        // Si es fundación, no se valida permiso
 
         $request->validate([
             'id' => 'required|exists:productos,id',

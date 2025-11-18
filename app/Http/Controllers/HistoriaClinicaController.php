@@ -25,7 +25,11 @@ class HistoriaClinicaController extends Controller
         // Validar permiso solo si es funcionario (fundación tiene acceso total)
         $user = $request->user();
         if ($user instanceof \App\Models\Funcionario) {
-            if (!$user->can('crear historia')) {
+            // Validar por URL del permiso para coincidir con frontend
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'CrearHistoriaClinica';
+            });
+            if (!$tienePermiso) {
                 return response()->json(['message' => 'No tienes permiso para crear historias clínicas'], 403);
             }
         }
@@ -81,7 +85,11 @@ class HistoriaClinicaController extends Controller
             // Validar permiso solo si es funcionario (fundación tiene acceso total)
             $user = $request->user();
             if ($user instanceof \App\Models\Funcionario) {
-                if (!$user->can('editar historia')) {
+                // Validar por URL del permiso para coincidir con frontend
+                $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                    return $permiso->url === 'ActualizarHistoriaClinica';
+                });
+                if (!$tienePermiso) {
                     return response()->json(['message' => 'No tienes permiso para editar historias clínicas'], 403);
                 }
             }
@@ -123,7 +131,11 @@ class HistoriaClinicaController extends Controller
             // Validar permiso solo si es funcionario (fundación tiene acceso total)
             $user = $request->user();
             if ($user instanceof \App\Models\Funcionario) {
-                if (!$user->can('eliminar historia')) {
+                // Validar por URL del permiso para coincidir con frontend
+                $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                    return $permiso->url === 'EliminarHistoriaClinica';
+                });
+                if (!$tienePermiso) {
                     return response()->json(['message' => 'No tienes permiso para eliminar historias clínicas'], 403);
                 }
             }
