@@ -43,6 +43,7 @@ Route::get('traerPersonaIdFundacion', [FundacionController::class, 'traerPersona
 
 // Personas públicas
 Route::get('/', [PersonaController::class, 'index']);
+Route::get('personas', [PersonaController::class, 'index']); // Ruta específica para listar personas
 Route::post('crear', [PersonaController::class, 'crear']);
 Route::get('traerPersonaId', [PersonaController::class, 'traerPersonaId']);
 Route::post('actualizar', [PersonaController::class, 'actualizar']);
