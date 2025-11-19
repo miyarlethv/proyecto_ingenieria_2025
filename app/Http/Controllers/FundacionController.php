@@ -35,15 +35,24 @@ class FundacionController extends Controller
         'logo' => 'required|image|mimes:jpg,png,jpeg|max:2048',
     ]);
 
+    $logoPath = null;
     if ($request->hasFile('logo')) {
-        $path = $request->file('logo')->store('logos', 'public');
-        $request->merge(['logo' => $path]);
+        $logoPath = $request->file('logo')->store('logos', 'public');
     }
 
-    $fundacion = Fundacion::crear($request->all());
+    $fundacion = Fundacion::crear([
+        'nombre' => $request->nombre,
+        'nit' => $request->nit,
+        'email' => $request->email,
+        'telefono' => $request->telefono,
+        'direccion' => $request->direccion,
+        'password' => $request->password,
+        'slogan' => $request->slogan,
+        'logo' => $logoPath,
+    ]);
 
-    // 🔗 Agrega la URL pública
-    $fundacion->logo_url = asset('storage/' . $fundacion->logo);
+    // Agregar URL pública del logo
+    $fundacion->logo_url = $logoPath ? asset('storage/' . $logoPath) : null;
 
     return response()->json($fundacion, 201);
 }
