@@ -24,6 +24,18 @@ class MascotaController extends Controller
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        // Validar permiso solo si es funcionario (fundación tiene acceso total)
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            // Validar por URL del permiso para coincidir con frontend
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'CrearMascotas';
+            });
+            if (!$tienePermiso) {
+                return response()->json(['message' => 'No tienes permiso para crear mascotas'], 403);
+            }
+        }
+
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('mascotas', 'public');
             $validated['foto'] = $fotoPath;
@@ -50,6 +62,18 @@ class MascotaController extends Controller
 
         $mascota = Mascota::findOrFail($validated['id']);
 
+        // Validar permiso solo si es funcionario (fundación tiene acceso total)
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            // Validar por URL del permiso para coincidir con frontend
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'ActualizarMascotas';
+            });
+            if (!$tienePermiso) {
+                return response()->json(['message' => 'No tienes permiso para editar mascotas'], 403);
+            }
+        }
+
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('mascotas', 'public');
             $validated['foto'] = $fotoPath;
@@ -71,6 +95,19 @@ class MascotaController extends Controller
         ]);
 
         $mascota = Mascota::findOrFail($validated['id']);
+        
+        // Validar permiso solo si es funcionario (fundación tiene acceso total)
+        $user = $request->user();
+        if ($user instanceof \App\Models\Funcionario) {
+            // Validar por URL del permiso para coincidir con frontend
+            $tienePermiso = $user->getAllPermissions()->contains(function ($permiso) {
+                return $permiso->url === 'EliminarMascotas';
+            });
+            if (!$tienePermiso) {
+                return response()->json(['message' => 'No tienes permiso para eliminar mascotas'], 403);
+            }
+        }
+        
         $mascota->estado = 'deshabilitado';
         $mascota->save();
 

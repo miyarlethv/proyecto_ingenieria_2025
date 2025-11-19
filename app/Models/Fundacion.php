@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\HasApiTokens;
 
-class Fundacion extends Model
+
+class Fundacion extends Authenticatable
 {
-    use SoftDeletes, HasApiTokens;
+    use SoftDeletes, HasApiTokens, Notifiable;
 
     protected $table = 'fundaciones';
 
@@ -26,7 +29,7 @@ class Fundacion extends Model
 
     protected $hidden = ['password'];
 
-    // Crear nueva persona
+    // Crear nueva fundacion con password encriptado
     public static function crear(array $data): self
     {
         $data['password'] = Hash::make($data['password']);
@@ -36,21 +39,19 @@ class Fundacion extends Model
     // Actualizar fundacion
     public function actualizar(array $data): bool
     {
-        $persona = self::findOrFail($data['id']);
+        $fundacion = self::findOrFail($data['id']);
 
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
 
-        return $this->update($data);
+        return $fundacion->update($data);
     }
 
     public static function eliminarPorId($id): bool
     {
-        $persona = self::findOrFail($id);
-        return $persona->delete();
+        $fundacion = self::findOrFail($id);
+        return $fundacion->delete();
     }
-
-    
 
 }

@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'fundacion' => [
+            'driver' => 'session',
+            'provider' => 'fundaciones',
+        ],
     ],
 
     /*
@@ -60,11 +64,15 @@ return [
     */
 
         'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Funcionario::class,
+            'users' => [
+                'driver' => 'eloquent',
+                'model' => App\Models\Funcionario::class,
+            ],
+            'fundaciones' => [
+                'driver' => 'eloquent',
+                'model' => App\Models\Fundacion::class,
+            ],
         ],
-    ],
 
 
         // 'users' => [

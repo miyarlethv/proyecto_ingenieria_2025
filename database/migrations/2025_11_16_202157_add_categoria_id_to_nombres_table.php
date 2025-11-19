@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('producto_nombres', function (Blueprint $table) {
-            $table->foreignId('categoria_id')->nullable()->after('id')->constrained('categorias')->onDelete('set null');
+          Schema::table('producto_nombres', function (Blueprint $table) {
+              $table->unsignedBigInteger('categoria_id')->nullable()->after('id');
         });
     }
 

@@ -15,6 +15,24 @@ class FuncionarioController extends Controller
        $funcionarios = Funcionario::with('roles')->get(); // Spatie roles
         return response()->json($funcionarios);
     }
+
+    // Listar funcionarios con sus roles para formularios
+    public function listarConRoles()
+    {
+        $funcionarios = Funcionario::with('roles')->get()->map(function ($funcionario) {
+            $primerRol = $funcionario->roles->first();
+            
+            return [
+                'id' => $funcionario->id,
+                'nombre' => $funcionario->nombre,
+                'email' => $funcionario->email,
+                'roles' => $funcionario->roles->pluck('name')->toArray(),
+                'rol_principal' => $primerRol ? $primerRol->name : 'Sin rol',
+            ];
+        });
+
+        return response()->json($funcionarios);
+    }
     
 
     // Crear nuevo funcionario

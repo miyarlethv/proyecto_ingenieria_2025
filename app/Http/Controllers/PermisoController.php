@@ -21,6 +21,13 @@ class PermisoController extends Controller
      */
     public function store(Request $request)
     {
+        // 🔍 DEBUG: Log para ver qué llega
+        \Illuminate\Support\Facades\Log::info('🔍 PermisoController@store INICIO', [
+            'auth_header' => $request->header('authorization'),
+            'user' => $request->user() ? get_class($request->user()).':'.$request->user()->id : 'NULL',
+            'ip' => $request->ip(),
+        ]);
+
         $data = $request->validate([
             'name' => 'required|string|unique:permissions,name',
             'descripcion' => 'nullable|string',

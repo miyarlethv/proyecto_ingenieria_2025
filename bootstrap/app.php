@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
@@ -22,6 +22,4 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 401);
             }
         });
-    })->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
     })->create();

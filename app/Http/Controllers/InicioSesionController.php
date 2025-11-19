@@ -36,11 +36,14 @@ class InicioSesionController extends Controller
         // 🔹 2️⃣ Verificar si es una Fundación
         $fundacion = Fundacion::where('email', $request->email)->first();
         if ($fundacion && Hash::check($request->password, $fundacion->password)) {
+            // Crear token de API para la fundación
+            $token = $fundacion->createToken('fundacion_token')->plainTextToken;
+
             return response()->json([
                 'message' => 'Inicio de sesión exitoso',
                 'tipo' => 'fundacion',
                 'nombre' => $fundacion->nombre,
-                'token' => $fundacion->createToken('auth_token')->plainTextToken,
+                'token' => $token,
                 'data' => $fundacion
             ], 200);
         }
@@ -49,16 +52,27 @@ class InicioSesionController extends Controller
         $funcionario = Funcionario::where('email', $request->email)->first();
         if ($funcionario && Hash::check($request->password, $funcionario->password)) {
 
-            // Iniciar sesión con Auth para usar Sanctum
-            Auth::login($funcionario);
+            // Crear token de API para el funcionario
+            $token = $funcionario->createToken('funcionario_token')->plainTextToken;
+
+            // Obtener permisos con sus URLs
+            $permisos = $funcionario->getAllPermissions()->map(function ($permiso) {
+                return [
+                    'id' => $permiso->id,
+                    'name' => $permiso->name,
+                    'url' => $permiso->url ?? null,
+                    'descripcion' => $permiso->descripcion ?? null,
+                ];
+            });
 
             return response()->json([
                 'message' => 'Inicio de sesión exitoso',
                 'tipo' => 'funcionario',
                 'nombre' => $funcionario->nombre,
+                'email' => $funcionario->email,
                 'roles' => $funcionario->getRoleNames(),
-                'permissions' => $funcionario->getAllPermissions()->pluck('name'),
-                'token' => $funcionario->createToken('auth_token')->plainTextToken,
+                'permisos' => $permisos,
+                'token' => $token,
                 'data' => $funcionario
             ], 200);
         }
