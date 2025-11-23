@@ -43,6 +43,7 @@ class InicioSesionController extends Controller
                 'message' => 'Inicio de sesión exitoso',
                 'tipo' => 'fundacion',
                 'nombre' => $fundacion->nombre,
+                'fundacion_id' => $fundacion->id, // ✅ AGREGADO
                 'token' => $token,
                 'data' => $fundacion
             ], 200);
@@ -70,6 +71,7 @@ class InicioSesionController extends Controller
                 'tipo' => 'funcionario',
                 'nombre' => $funcionario->nombre,
                 'email' => $funcionario->email,
+                'fundacion_id' => $funcionario->fundacion_id ?? null, // ✅ AGREGADO (si el funcionario pertenece a una fundación)
                 'roles' => $funcionario->getRoleNames(),
                 'permisos' => $permisos,
                 'token' => $token,
