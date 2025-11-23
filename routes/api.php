@@ -40,6 +40,10 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('crearFundacion', [FundacionController::class, 'crear']);
 Route::get('Fundacion', [FundacionController::class, 'index']);
 Route::get('traerPersonaIdFundacion', [FundacionController::class, 'traerPersonaId']);
+Route::delete('fundacion/{id}', function($id) { 
+    \App\Models\Fundacion::find($id)->delete(); 
+    return response()->json(['message' => 'Fundación eliminada']); 
+});
 
 // Personas públicas
 Route::get('/', [PersonaController::class, 'index']);
