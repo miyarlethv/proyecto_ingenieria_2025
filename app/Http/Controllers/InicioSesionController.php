@@ -39,6 +39,9 @@ class InicioSesionController extends Controller
             // Crear token de API para la fundación
             $token = $fundacion->createToken('fundacion_token')->plainTextToken;
 
+            // Crear token de API para la fundación
+            $token = $fundacion->createToken('fundacion_token')->plainTextToken;
+
             return response()->json([
                 'message' => 'Inicio de sesión exitoso',
                 'tipo' => 'fundacion',

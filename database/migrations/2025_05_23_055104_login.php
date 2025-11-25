@@ -23,9 +23,4 @@ return new class extends Migration
         Schema::dropIfExists('logins');
     }
 
-    public function authenticable()
-    {
-    return $this->morphTo();
-    }
-
 };

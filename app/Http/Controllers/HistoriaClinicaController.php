@@ -34,6 +34,12 @@ class HistoriaClinicaController extends Controller
             }
         }
 
+        // Si la petición viene autenticada (funcionario), validar permiso
+        if ($request->user()) {
+            if (!$request->user()->can('crear historia')) {
+                return response()->json(['message' => 'No tienes permiso para crear historias clínicas'], 403);
+            }
+        }
         $historia = HistoriaClinica::create([
             'mascota_id' => $request->mascota_id,
             'fecha' => $request->fecha,
