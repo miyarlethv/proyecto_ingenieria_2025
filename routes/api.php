@@ -66,13 +66,22 @@ Route::middleware(['auth:sanctum', \App\Http\Middleware\EnsureIsFundacion::class
     Route::post('actualizarFundacion', [FundacionController::class, 'actualizar']);
     Route::post('eliminarPorIdFundacion', [FundacionController::class, 'eliminarPorId']);
 
+
     // Roles
+    Route::post('CrearRol', [RolController::class, 'store']);
+    Route::get('ListarRoles', [RolController::class, 'index']);
+    Route::put('ActualizarRol', [RolController::class, 'actualizar']);
+    Route::put('EliminarRol', [RolController::class, 'eliminar']);
     Route::post('CrearRol', [RolController::class, 'store']);
     Route::get('ListarRoles', [RolController::class, 'index']);
     Route::put('ActualizarRol', [RolController::class, 'actualizar']);
     Route::put('EliminarRol', [RolController::class, 'eliminar']);
 
     // Permisos
+    Route::post('CrearPermiso', [PermisoController::class, 'store']);
+    Route::get('ListarPermisos', [PermisoController::class, 'index']);
+    Route::put('ActualizarPermiso', [PermisoController::class, 'actualizar']);
+    Route::put('EliminarPermiso', [PermisoController::class, 'eliminar']);
     Route::post('CrearPermiso', [PermisoController::class, 'store']);
     Route::get('ListarPermisos', [PermisoController::class, 'index']);
     Route::put('ActualizarPermiso', [PermisoController::class, 'actualizar']);
